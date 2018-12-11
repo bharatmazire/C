@@ -12,9 +12,10 @@ int main()
     {
         for(int j = 1 ; j < 10 - i ; j++)
         {
-            printf("Swapping between arr[%d]-> %d and arr[%d]-> %d\n",j-1,arr[j-1],j,arr[j]);
+            
             if(arr[j-1] > arr[j])
             {
+                printf("Swapping between arr[%d]-> %d and arr[%d]-> %d\n",j-1,arr[j-1],j,arr[j]);
                 int temp = arr[j];
                 arr[j] = arr[j-1];
                 arr[j-1] = temp;
