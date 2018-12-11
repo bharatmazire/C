@@ -24,7 +24,7 @@ int main()
         printf("Arrya state after %dth iteration is : ",i);
         for(int p = 0 ; p < 10 ; p++)
         {
-            printf("%d ",p);
+            printf("%d ",arr[p]);
         }
         printf("\n");
     }
