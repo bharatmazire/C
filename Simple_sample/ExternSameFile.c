@@ -6,8 +6,8 @@ void ChangeCountByOne();
 
 void main()
 {
-    // declaration of variable
-    int count;
+    // declaration of extern variable
+    extern int count;
     
     // code
     printf("count befor ChangeCountByOne() is : %d\n",count);
@@ -16,11 +16,11 @@ void main()
 }
 
 // declaration and initialization of global variable
-extern int count = 0;
+int count = 0;
 
 void ChangeCountByOne()
 {
     // code
     count = count + 1;
-    printf("count = %d \n",count);
+    printf("(in change count function)count = %d \n",count);
 }
