@@ -23,3 +23,8 @@ Insightful Questions: These questions are designed to demonstrate your deep know
 of programming or technologies.
 1. “I noticed that you use technology X. How do you handle problem Y?”
 
+// todo
+mass cha part in physics
+chemistry default enable 
+WM_GEASTURE_2k18 name and project ani batch name add krne
+edit box middle type
