@@ -23,3 +23,4 @@ Insightful Questions: These questions are designed to demonstrate your deep know
 of programming or technologies.
 1. “I noticed that you use technology X. How do you handle problem Y?”
 
+Seeking for job where i can test my limits
