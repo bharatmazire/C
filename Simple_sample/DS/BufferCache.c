@@ -33,8 +33,16 @@ int main()
   
   struct BUFFER * FreeListHead = NULL;
 
-  printf("Hello World !!");
+  for(int i = 0 ; i < iNumberOfHashQuese ; i ++)
+  {
+  // for ArrayOfHashList[i] : 0,1,2
+    for(int j = 0 ; j < iInitialNoOfBuffInEachQueue ; j++)
+    {
+      struct BUFFER * buff = (struct BUFFER *)malloc(sizeof)(struct BUFFER *);
+    }
+  }
 
+
+  printf("Hello World !!");
   return(0);
 }
-
