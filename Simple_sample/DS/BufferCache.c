@@ -46,9 +46,9 @@ int main()
             if(j == 0)
             {
                 buff->nextHash = NULL;
-                buff->prevHash = ArrayOfHashList[i];
-                buff->nextFree = buff;
-                buff->prevFree = buff;
+                buff->prevHash = NULL;
+                buff->nextFree = ArrayOfHashList[i];
+                buff->prevFree = ArrayOfHashList[i];
                 
                 ArrayOfHashList[i] = buff;
             }
@@ -66,8 +66,8 @@ int main()
                 
                 buff->nextHash = NULL;
                 buff->prevHash = traverseHash;
-                buff->nextFree = NULL;
-                buff->prevFree = 
+                buff->nextFree = FreeListHead->prevFree;
+                buff->prevFree = FreeListHead->prevFree->nextFree
                 
             }
         }
