@@ -47,16 +47,27 @@ int main()
             {
                 buff->nextHash = NULL;
                 buff->prevHash = ArrayOfHashList[i];
-                buff->nextFree = NULL;
-                buff->prevFree = FreeListHead;
+                buff->nextFree = buff;
+                buff->prevFree = buff;
+                
+                ArrayOfHashList[i] = buff;
             }
             else
             {
-                struct BUFFER * traverse = (struct BUFFER *)malloc(sizeof(struct BUFFER));
-                while(ArrayOfHashList[0]->nextHash != NULL)
+                struct BUFFER * traverseHash = (struct BUFFER *)malloc(sizeof(struct BUFFER));
+                traverseHash = ArrayOfHashList[i];
+                while(traverseHash->nextHash != NULL)
                 {
-                    
+                    traverseHash = traverseHash->nextHash;    
                 }
+                
+                struct BUFFER * traverseFree = (struct BUFFER *)malloc(sizeof(struct BUFFER));
+                traverseFree = FreeListHead;
+                
+                buff->nextHash = NULL;
+                buff->prevHash = traverseHash;
+                buff->nextFree = NULL;
+                buff->prevFree = 
                 
             }
         }
