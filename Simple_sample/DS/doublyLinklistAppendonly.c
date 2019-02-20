@@ -45,10 +45,10 @@ void display(struct BUFFER *head)
         
     while(traverse->nextHashQueue != NULL)
     {
-      printf(" :: %d :: ",traverse->iData);
+      printf(" %d ->",traverse->iData);
       traverse = traverse->nextHashQueue;
     }
-    printf(" :: %d :: ",traverse->iData);
+    printf("  %d ",traverse->iData);
 }
 
 int main()
@@ -56,6 +56,21 @@ int main()
     struct BUFFER **head = (struct BUFFER **)malloc(3 * sizeof(struct BUFFER *));
     int ch,data;
     
+    for(int i = 0 ; i < 3 ; i++)
+    {
+        for(int j = 0 ; j < 3 ; j++)
+            head[i] = insert(head[i],j);
+    }
+    
+    for(int i = 0 ; i < 3 ; i++)
+    {
+        printf("HashList %d :\n",i);
+        display(head[i]);
+        printf("\n");
+    }
+    
+    
+    /*
     do
     {
         printf("\n1.insert 2.display 3.exit\n");
@@ -75,6 +90,10 @@ int main()
             break;
         }
     }while(ch != 3);
+    */
+    
+    
+    
     
     return 0;
 }
