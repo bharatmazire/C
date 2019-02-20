@@ -12,7 +12,7 @@ struct BUFFER
   struct BUFFER *prevFreeList;
 };
 
-struct BUFFER * insert(struct BUFFER * insertHead, int Data)
+struct BUFFER * insert(struct BUFFER * insertHead, int Data,struct BUFFER ** freeHead)
 {
     struct BUFFER *st = (struct BUFFER *)malloc(sizeof(struct BUFFER));
     st->iData = Data;
@@ -38,6 +38,26 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data)
         traverse->nextHashQueue = st;
         st->prevHashQueue = traverse;
     }
+    
+    if(*freeHead == NULL)
+    {
+        *freeHead = st;
+    }
+    else
+    {
+        struct BUFFER *traverse;
+        traverse = *freeHead;
+        
+        while(traverse->nextFreeList != NULL)
+        {
+            traverse = traverse->nextFreeList;
+        }
+        
+        traverse->nextFreeList = st;
+        st->prevFreeList = traverse;
+    }
+    
+    
     return(insertHead);
 }
 
@@ -64,7 +84,7 @@ int main()
     for(int i = 0 ; i < 3 ; i++)
     {
         for(int j = 0 ; j < 3 ; j++)
-            HashListHead[i] = insert(HashListHead[i],j);
+            HashListHead[i] = insert(HashListHead[i],j,&FreeListHead);
     }
     
     for(int i = 0 ; i < 3 ; i++)
@@ -72,8 +92,9 @@ int main()
         printf("HashList %d :\n",i);
         display(HashListHead[i]);
     }
-    
-    
+     printf("FREE LIST:\n");
+    display(FreeListHead);
+
     
     /*
     do
