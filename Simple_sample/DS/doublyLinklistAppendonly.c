@@ -50,9 +50,10 @@ void display(struct BUFFER *head)
     }
     printf(" :: %d :: ",traverse->iData);
 }
+
 int main()
 {
-    struct BUFFER *head = NULL;
+    struct BUFFER **head = (struct BUFFER **)malloc(3 * sizeof(struct BUFFER *));
     int ch,data;
     
     do
@@ -66,9 +67,9 @@ int main()
             printf("\nEnter data to insert : ");
             scanf("%d",&data);
             //printf("\ncalling function with data : %d",data);
-            head = insert(head,data);
+            head[0] = insert(head[0],data);
             break;
-            case 2:display(head);
+            case 2:display(head[0]);
             break;
             case 3:printf("\nbye\n");
             break;
