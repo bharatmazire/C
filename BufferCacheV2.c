@@ -16,17 +16,20 @@ struct BUFFER
 
 
 
-struct BUFFER * insert(struct BUFFER * insertHead, int Data, struct BUFFER ** freeHead)
+struct BUFFER * insert(struct BUFFER * insertHead, int BlockNumber, struct BUFFER ** freeHead)
 {
-	
+	// initialization
 	struct BUFFER *st = (struct BUFFER *)malloc(sizeof(struct BUFFER));
+	
+	// assigning values
 	st->iStatus = 0;
-	st->iBlockNumber = Data;
+	st->iBlockNumber = BlockNumber;
 	st->nextHashQueue = NULL;
 	st->prevHashQueue = NULL;
 	st->nextFreeList = st;
 	st->prevFreeList = st;
 	
+	// for hashlist
 	if (insertHead == NULL)
 	{
 		insertHead = st;
@@ -45,6 +48,7 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data, struct BUFFER ** fr
 		st->prevHashQueue = traverse;
 	}
 
+	// for freelist
 	if (*freeHead == NULL)
 	{
 		*freeHead = st;
@@ -58,6 +62,7 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data, struct BUFFER ** fr
 		traverse->prevFreeList->nextFreeList = st;
 		traverse->prevFreeList = st;
 	}
+
 	return(insertHead);
 }
 
@@ -68,10 +73,10 @@ void displayHash(struct BUFFER *head)
 
 	while (traverse != NULL)
 	{
-		printf(" %d :: %d ->", traverse->iBlockNumber,traverse->iStatus);
+		printf("\t\t BLK_NO = %d | STATUS =  %d ---> ", traverse->iBlockNumber,traverse->iStatus);
 		traverse = traverse->nextHashQueue;
 	}
-	printf(" NULL\n");
+	printf(" NULL \n");
 }
 
 void displayFree(struct BUFFER *head)
@@ -85,25 +90,22 @@ void displayFree(struct BUFFER *head)
 	}
 	else
 	{
-		printf(" %d ->", traverse->iBlockNumber);
+		printf("\t\t BLK_NO = %d ---> ", traverse->iBlockNumber);
 		traverse = traverse->nextFreeList;
 
 		while (traverse != head)
 		{
-			printf(" %d ->", traverse->iBlockNumber);
+			printf(" BLK_NO = %d ---> ", traverse->iBlockNumber);
 			traverse = traverse->nextFreeList;
 		}
 	}
 }
 
-
-
-
 void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 {
-	printf("\nblock number : %d \n", db);
+	printf("\nBlock Number is : %d \n", db);
 	int modVal = db % 3;
-	printf("mod val of block number is : %d \n", modVal);
+	printf("Hash Value of %d is : %d \n",db, modVal);
 
 	struct BUFFER *traverse;
 	traverse = hashHead[modVal];
@@ -113,7 +115,8 @@ void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 	}
 	if (traverse->iBlockNumber == db)
 	{
-		printf("got buffer \n");
+		printf("\n\n GOT THE BUFFER \n\n");
+		
 		// if buffer on free list, remove it from free list
 
 		if (traverse->nextFreeList != NULL && traverse->prevFreeList != NULL)
@@ -128,10 +131,10 @@ void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 	}
 	else
 	{
-		printf("buffer not present in pool !!\n");
-		printf("need to get new buffer from free list and use it !\n");
+		printf("Buffer Not Present In Pool !!\n");
+		printf("Getting buffer from Free List\n");
 
-		// part for buffer not in pool
+
 		struct BUFFER *t;
 		t = *freeHead;
 		if (t == NULL)
@@ -140,7 +143,7 @@ void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 			printf("exiting");
 			exit(0); // free and then exit
 		}
-		printf("picking up 1st buffer from free list");
+		printf("Picking up 1st buffer from free list");
 
 		t->prevFreeList->nextFreeList = t->nextFreeList;
 		t->nextFreeList->prevFreeList = t->prevFreeList;
@@ -155,26 +158,29 @@ void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 
 int main()
 {
-	// initial part of buffer pool creation with some buffers
+	// initialization
 	struct BUFFER **HashListHead = (struct BUFFER **)malloc(3 * sizeof(struct BUFFER *));
 	struct BUFFER *FreeListHead = NULL;
 
-	for (int p = 0; p < 3; p++)
-	{
-		HashListHead[p] = NULL;
-	}
+	int iDataBlock;
+	int cnt = 1;
 
+	// code
+
+	// creating buffer pool
 	for (int i = 0; i < 3; i++)
 	{
+		HashListHead[i] = NULL;
 		for (int j = 0; j < 3; j++)
 		{
-			HashListHead[i] = insert(HashListHead[i], i+(3*j), &FreeListHead);
+			HashListHead[i] = insert(HashListHead[i], i + (3 * j), &FreeListHead);
 		}
 	}
 
+	// printing buffer pool
 	for (int i = 0; i < 3; i++)
 	{
-		printf("HashList %d :\n", i);
+		printf("\nHashList %d :\n", i);
 		displayHash(HashListHead[i]);
 	}
 
@@ -182,12 +188,10 @@ int main()
 	displayFree(FreeListHead);
 
 	printf("\n\n\n.........................................\n\n\n");
-	// buffer pool created
+	
 
-	//......................
+	// playing around
 
-	int iDataBlock;
-	int cnt = 1;
 	while (cnt != 10)
 	{
 		int iDataBlock = rand()%10;
