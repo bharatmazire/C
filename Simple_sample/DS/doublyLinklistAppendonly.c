@@ -18,8 +18,8 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data,struct BUFFER ** fre
     st->iData = Data;
     st->nextHashQueue = NULL;
     st->prevHashQueue = NULL;
-    st->nextFreeList = NULL;
-    st->prevFreeList = NULL;
+    st->nextFreeList = st;
+    st->prevFreeList = st;
     
     if(insertHead == NULL)
     {
@@ -45,7 +45,14 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data,struct BUFFER ** fre
     }
     else
     {
+        struct BUFFER *traverse;
+        traverse = *freeHead;
+       st->nextFreeList = traverse->nextFreeList->prevFreeList;
+       st->prevFreeList = traverse->prevFreeList;
+       traverse->prevFreeList->nextFreeList = st;
+      traverse->prevFreeList = st;
        
+        /*
         struct BUFFER *traverse;
         traverse = *freeHead;
         
@@ -57,6 +64,8 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data,struct BUFFER ** fre
         printf("%d \n",traverse->iData);
         traverse->nextFreeList = st;
         st->prevFreeList = traverse;
+        */
+        
     }
     
     
@@ -78,15 +87,25 @@ void display(struct BUFFER *head)
 
 void displayFree(struct BUFFER *head)
 {
-    struct BUFFER *traverse;
+    struct BUFFER *traverse;//, *pre;
     traverse = head;
-        
-    while(traverse!= NULL)
+   // pre = head;
+    
+    if(head == NULL)
     {
-      printf(" %d ->",traverse->iData);
-      traverse = traverse->nextFreeList;
+        printf("No data\n");
     }
-    printf(" NULL\n");
+    else
+    {
+        printf("%d ->",traverse->iData);
+        traverse = traverse->nextFreeList;
+        
+         while(traverse!= head)
+        {
+            printf(" %d ->",traverse->iData);
+            traverse = traverse->nextFreeList;
+        }
+    }
 }
 
 int main()
