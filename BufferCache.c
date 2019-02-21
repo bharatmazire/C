@@ -7,6 +7,7 @@ struct BUFFER
 {
   int iStatus; // 0 : free / 1 : locked / 2 : delayed write
   int iBlockNumber;
+  char cData[BUFFER_SIZE];
   struct BUFFER *nextHashQueue;
   struct BUFFER *prevHashQueue;
   struct BUFFER *nextFreeList;
