@@ -95,17 +95,33 @@ void displayFree(struct BUFFER *head)
     }
 }
 
+
+void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
+{
+    
+}
+
+
+
+
+
+
+
+
+
+
 int main()
 {
+    // initial part of buffer pool creation with some buffers
+    
     struct BUFFER **HashListHead = (struct BUFFER **)malloc(3 * sizeof(struct BUFFER *));
     struct BUFFER *FreeListHead = NULL;
     
-    int c = 0;
     for(int i = 0 ; i < 3 ; i++)
     {
         for(int j = 0 ; j < 3 ; j++)
         {
-            HashListHead[i] = insert(HashListHead[i],++c,&FreeListHead);
+            HashListHead[i] = insert(HashListHead[i],i,&FreeListHead);
         }
     }
     
@@ -117,6 +133,15 @@ int main()
     
     printf("FREE LIST:\n");
     displayFree(FreeListHead);
+    
+    // buffer pool created
+    //......................
+    
+    int iDataBlock = rand();
+    //GetBlk(iDataBlock,HashListHead,&FreeListHead);
+    
+    
+    
 
     return 0;
 }
