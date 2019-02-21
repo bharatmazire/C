@@ -5,7 +5,8 @@
 
 struct BUFFER
 {
-  int iData;
+  int iStatus; // 0 : free / 1 : locked / 2 : delayed write
+  int iBlockNumber;
   struct BUFFER *nextHashQueue;
   struct BUFFER *prevHashQueue;
   struct BUFFER *nextFreeList;
@@ -15,7 +16,8 @@ struct BUFFER
 struct BUFFER * insert(struct BUFFER * insertHead, int Data,struct BUFFER ** freeHead)
 {
     struct BUFFER *st = (struct BUFFER *)malloc(sizeof(struct BUFFER));
-    st->iData = Data;
+    st->iStatus = 0;
+    st->iBlockNumber = Data;
     st->nextHashQueue = NULL;
     st->prevHashQueue = NULL;
     st->nextFreeList = st;
@@ -56,14 +58,14 @@ struct BUFFER * insert(struct BUFFER * insertHead, int Data,struct BUFFER ** fre
     return(insertHead);
 }
 
-void display(struct BUFFER *head)
+void displayHash(struct BUFFER *head)
 {
     struct BUFFER *traverse;
     traverse = head;
         
     while(traverse!= NULL)
     {
-      printf(" %d ->",traverse->iData);
+      printf(" %d :: %d ->",traverse->iBlockNumber,traverse->iStatus);
       traverse = traverse->nextHashQueue;
     }
     printf(" NULL\n");
@@ -81,12 +83,12 @@ void displayFree(struct BUFFER *head)
     }
     else
     {
-        printf("%d ->",traverse->iData);
+        printf(" %d :: %d ->",traverse->iBlockNumber,traverse->iStatus);
         traverse = traverse->nextFreeList;
         
          while(traverse!= head)
         {
-            printf(" %d ->",traverse->iData);
+            printf(" %d :: %d ->",traverse->iBlockNumber,traverse->iStatus);
             traverse = traverse->nextFreeList;
         }
     }
@@ -97,7 +99,6 @@ int main()
     struct BUFFER **HashListHead = (struct BUFFER **)malloc(3 * sizeof(struct BUFFER *));
     struct BUFFER *FreeListHead = NULL;
     
-    int ch,data;
     int c = 0;
     for(int i = 0 ; i < 3 ; i++)
     {
@@ -110,7 +111,7 @@ int main()
     for(int i = 0 ; i < 3 ; i++)
     {
         printf("HashList %d :\n",i);
-        display(HashListHead[i]);
+        displayHash(HashListHead[i]);
     }
     
     printf("FREE LIST:\n");
