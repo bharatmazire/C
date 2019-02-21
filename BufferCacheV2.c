@@ -85,12 +85,12 @@ void displayFree(struct BUFFER *head)
 	}
 	else
 	{
-		printf(" %d :: %d ->", traverse->iBlockNumber, traverse->iStatus);
+		printf(" %d ->", traverse->iBlockNumber);
 		traverse = traverse->nextFreeList;
 
 		while (traverse != head)
 		{
-			printf(" %d :: %d ->", traverse->iBlockNumber, traverse->iStatus);
+			printf(" %d ->", traverse->iBlockNumber);
 			traverse = traverse->nextFreeList;
 		}
 	}
@@ -120,6 +120,7 @@ void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 		{
 			traverse->prevFreeList->nextFreeList = traverse->nextFreeList;
 			traverse->nextFreeList->prevFreeList = traverse->prevFreeList;
+			*freeHead = traverse->nextFreeList;
 			traverse->prevFreeList = NULL;
 			traverse->nextFreeList = NULL;
 			traverse->iStatus = 1;
@@ -131,12 +132,23 @@ void GetBlk(int db, struct BUFFER ** hashHead, struct BUFFER ** freeHead)
 		printf("need to get new buffer from free list and use it !\n");
 
 		// part for buffer not in pool
+		struct BUFFER *t;
+		t = *freeHead;
+		if (t == NULL)
+		{
+			printf("No buffer in free list");
+			printf("exiting");
+			exit(0); // free and then exit
+		}
+		printf("picking up 1st buffer from free list");
 
-
-
-
-
-
+		t->prevFreeList->nextFreeList = t->nextFreeList;
+		t->nextFreeList->prevFreeList = t->prevFreeList;
+		*freeHead = t->nextFreeList;
+		t->prevFreeList = NULL;
+		t->nextFreeList = NULL;
+		t->iStatus = 1;
+		t->iBlockNumber = db;
 	}
 
 }
@@ -156,7 +168,7 @@ int main()
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			HashListHead[i] = insert(HashListHead[i], i, &FreeListHead);
+			HashListHead[i] = insert(HashListHead[i], i+(3*j), &FreeListHead);
 		}
 	}
 
@@ -169,14 +181,14 @@ int main()
 	printf("FREE LIST:\n");
 	displayFree(FreeListHead);
 
-
+	printf("\n\n\n.........................................\n\n\n");
 	// buffer pool created
 
 	//......................
 
 	int iDataBlock;
 	int cnt = 1;
-	while (cnt != 20)
+	while (cnt != 10)
 	{
 		int iDataBlock = rand()%10;
 		GetBlk(iDataBlock, HashListHead, &FreeListHead);
