@@ -18,10 +18,11 @@ struct INODE
 };
 
 struct INODE IIT[SIZE_OF_IIT];  // global table
-
+int igIITIndex = 0;
 struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **FreeHead)
 {
   struct INODE *inode = (struct INODE *)malloc(sizeof(struct INODE));
+  
   inode->prevHash = NULL;
   inode->nextHash = NULL;
   inode->nextFree = inode;
@@ -62,6 +63,9 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
     (*FreeHead)->prevFree->nextFree = inode;
     (*FreeHead)->prevFree = inode;
   }
+  
+  IIT[igIITIndex] = inode;
+  igIITIndex++;
   return(HashHead);
 }
 
