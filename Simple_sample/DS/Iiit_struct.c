@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #define SIZE_OF_IIT 9
 #define SIZE_OF_HASH 3
+#define NUM_OF_PROC 10
+
 
 struct INODE
 {
@@ -19,6 +21,7 @@ struct INODE
 
 struct INODE IIT[SIZE_OF_IIT];  // global table
 int igIITIndex = 0;
+
 struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **FreeHead)
 {
   struct INODE *inode = (struct INODE *)malloc(sizeof(struct INODE));
@@ -29,7 +32,7 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
   inode->prevFree = inode;
   inode->iInodeNum = iInodeNum;
   inode->iFileType = 0;
-  inode->iRefCount = 0;
+  inode->iRefCount = 0;   // if ref Count is 0 : put it on freelist
 
   // for hash head
   if(HashHead == NULL)
@@ -83,7 +86,7 @@ void display(int iChoice , struct INODE * travHead)
     {
       while(travHead != NULL)
       {
-        printf(" %d -> ",travHead->iInodeNum);
+        printf(" %d : %d -> ",travHead->iInodeNum,travHead->iRefCount);
         travHead = travHead->nextHash;
       }
       printf(" NULL ");
@@ -107,6 +110,8 @@ void display(int iChoice , struct INODE * travHead)
     }
   }
 }
+
+
 
 int main()
 {
@@ -142,6 +147,20 @@ int main()
     printf(" %d ",IIT[i].iInodeNum);
   }
 
+  printf("\n\n");
+
+  for(int iNumOfProc = 0 ; iNumOfProc < NUM_OF_PROC ; iNumOfProc++)
+  {
+    int iInodeNum = rand()%20;
+
+
+
+
+
+
+
+
+  }
 
   //printf("\n H e l l o \n");
   return(0);
