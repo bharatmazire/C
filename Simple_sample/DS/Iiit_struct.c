@@ -54,6 +54,7 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
   // for free list
   if(*FreeHead == NULL)
   {
+    printf("\n Free list head is NULL \n");
     *FreeHead = inode;
   }
   else
@@ -64,9 +65,47 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
     (*FreeHead)->prevFree = inode;
   }
   
-  IIT[igIITIndex] = inode;
+  IIT[igIITIndex] = *inode;
   igIITIndex++;
+  
   return(HashHead);
+}
+
+void display(int iChoice , struct INODE * travHead)
+{
+  if(travHead == NULL)
+  {
+    printf("\n NO DATA \n");
+  }
+  else
+  {
+    if(iChoice == 1)
+    {
+      while(travHead != NULL)
+      {
+        printf(" %d -> ",travHead->iInodeNum);
+        travHead = travHead->nextHash;
+      }
+      printf(" NULL ");
+    }
+    else if(iChoice == 2)
+    {
+      struct INODE *head;
+      head = travHead;
+
+      printf(" %d -> ",travHead->iInodeNum);
+      travHead = travHead->nextFree;
+      while(travHead != head)
+      {
+        printf(" %d -> ",travHead->iInodeNum);
+        travHead = travHead -> nextFree;
+      }
+    }
+    else
+    {
+      printf("Wrong Choice");
+    }
+  }
 }
 
 int main()
@@ -85,5 +124,25 @@ int main()
       HashQ[i] = insert( i + (SIZE_OF_HASH * j), HashQ[i], &FreeList);
     }
   }
+
+  printf("\n Hash List \n");
+  for(int i = 0 ; i < SIZE_OF_HASH ; i++)
+  {
+    printf("HASH[%d] : ",i);
+    display(1,HashQ[i]);
+    printf("\n");
+  }  
+  printf("\n Free List \n");
+  display(2,FreeList);
+
+
+  printf("\n\n IIT \n");
+  for(int i = 0 ; i < SIZE_OF_IIT ; i++)
+  {
+    printf(" %d ",IIT[i].iInodeNum);
+  }
+
+
+  //printf("\n H e l l o \n");
   return(0);
 }
