@@ -30,6 +30,7 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
   inode->iFileType = 0;
   inode->iRefCount = 0;
 
+  // for hash head
   if(HashHead == NULL)
   {
     printf("\n Hash Head is NULL !!\n");
@@ -45,15 +46,23 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
       travHash = travHash->nextHash;
     }
 
-    
-
-
-
-
+    travHash->nextHash = inode;
+    inode->prevHash = travHash;
   }
 
-
-
+  // for free list
+  if(*FreeHead == NULL)
+  {
+    *FreeHead = inode;
+  }
+  else
+  {
+    inode->nextFree = (*FreeHead);
+    inode->prevFree = (*FreeHead)->prevFree;
+    (*FreeHead)->prevFree->nextFree = inode;
+    (*FreeHead)->prevFree = inode;
+  }
+  return(HashHead);
 }
 
 int main()
