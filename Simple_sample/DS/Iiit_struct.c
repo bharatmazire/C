@@ -13,6 +13,7 @@ struct INODE
   int iFileSize;
   int iInodeNum;
   int iRefCount;
+  int iLock;
   struct INODE *nextHash;
   struct INODE *prevHash;
   struct INODE *nextFree;
@@ -33,6 +34,7 @@ struct INODE * insert(int iInodeNum, struct INODE *HashHead, struct INODE **Free
   inode->iInodeNum = iInodeNum;
   inode->iFileType = 0;
   inode->iRefCount = 0;   // if ref Count is 0 : put it on freelist
+  inode->iLock = 0;
 
   // for hash head
   if(HashHead == NULL)
@@ -111,7 +113,73 @@ void display(int iChoice , struct INODE * travHead)
   }
 }
 
+void Proc(int iInodeNum, struct INODE **hashHead, struct INODE **FreeHead)
+{
+  int isDone = 0;
+  int modVal = iInodeNum % SIZE_OF_HASH;
 
+
+  while(isDone != 1)
+  {
+    if(hashHead == NULL)
+    {
+      printf("\n No Inode Present on HASH LIST \n");
+      // need to handle this condition ahead
+    }
+    else
+    {
+      struct INODE *trav = hashHead[modVal];
+      while(trav->iInodeNum != iInodeNum && trav->nextHash != NULL)
+      {
+        trav = trav->nextHash;
+      }
+      if(trav->iInodeNum == iInodeNum )
+      {
+        if(trav->iLock == 0)
+        {
+          printf("\n Got The Unlocked Inode ! \n");
+          printf("\n Increment the inode reference count \n");
+          trav->iRefCount += 1;
+        }
+        else
+        {
+          printf("\nInode already locked !!\n");
+          printf("\nInode Locked\n");
+          // here you should sleep
+          continue;      
+        }
+      }
+      else if(trav->nextHash == NULL)
+      {
+        printf("\n Inode not present on HashQ \n");
+        printf("\n Need To pick inode from free inode list \n");
+        if(*FreeHead == NULL)
+        {
+          printf("\n No Inode on Free list \n ");
+          continue;       // or return error
+        }
+        else
+        {
+          printf("\n Free List contains INODES \n");
+          printf("\n Pick 1st Inode From list \n");
+          if((*FreeHead)->prevHash == NULL)
+          {
+            printf("\n FreeHead 1st Inode is first on Hash List \n");
+            hashHead[((*FreeHead)->iInodeNum)%SIZE_OF_HASH] = (*FreeHead)->nextHash;
+            if((*FreeHead)->nextHash != NULL)
+              (*FreeHead)->nextHash->prevHash = NULL;
+          }
+          (*FreeHead)->prevHash->nextHash = (*FreeHead)->nextHash;
+          (*FreeHead)->nextHash = NULL;
+          (*FreeHead)->prevHash = trav;
+        }
+      }
+    }
+
+
+  }
+
+}
 
 int main()
 {
@@ -153,6 +221,9 @@ int main()
   {
     int iInodeNum = rand()%20;
 
+    
+    //Proc(iInodeNum,HashQ,&FreeList); 
+    
 
 
 
