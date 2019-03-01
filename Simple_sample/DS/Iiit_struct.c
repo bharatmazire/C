@@ -121,10 +121,11 @@ void Proc(int iInodeNum, struct INODE **hashHead, struct INODE **FreeHead)
 
   while(isDone != 1)
   {
-    if(hashHead == NULL)
+    if(hashHead[modVal] == NULL)
     {
       printf("\n No Inode Present on HASH LIST \n");
       // need to handle this condition ahead
+      
     }
     else
     {
@@ -169,9 +170,13 @@ void Proc(int iInodeNum, struct INODE **hashHead, struct INODE **FreeHead)
             if((*FreeHead)->nextHash != NULL)
               (*FreeHead)->nextHash->prevHash = NULL;
           }
-          (*FreeHead)->prevHash->nextHash = (*FreeHead)->nextHash;
+          else
+          {
+              (*FreeHead)->prevHash->nextHash = (*FreeHead)->nextHash;
+          }
           (*FreeHead)->nextHash = NULL;
           (*FreeHead)->prevHash = trav;
+          trav->nextHash = (*FreeHead);
         }
       }
     }
