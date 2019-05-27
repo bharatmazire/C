@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<math.h>
 
-#define NUM 3
+#define NUM 10			// if this number is even : A and B interchanged
 
 int main()
 {
@@ -39,7 +39,7 @@ int main()
 	
 	printf("\nPrinting Stacks\n");
 	for(int i = iNumOfPiece-1 ; i >= 0 ; i--)
-	{
+	{ 
 		printf("S : %d | ",Src[i]);
 		printf("A : %d | ",Aux[i]);
 		printf("D : %d | ",Des[i]);
